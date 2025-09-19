@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ImageUploader } from "@/components/ImageUploader";
-import { StyleSelector, ImageStyle } from "@/components/StyleSelector";
+import { StyleSelector, ImageStyle, imageStyles } from "@/components/StyleSelector";
 import { GenerateButton } from "@/components/GenerateButton";
 import { SavedImages } from "@/components/SavedImages";
 import { UserMenu } from "@/components/auth/UserMenu";
@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Tabs } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { database, storage } from "@/lib/database";
 
 export default function Dashboard() {
@@ -46,25 +46,66 @@ export default function Dashboard() {
     
     setIsGenerating(true);
     setIsSaved(false);
+    setGeneratedImage(null);
     
     try {
-      // TODO: Implement actual image generation API call
-      // This is a placeholder - you'll need to integrate with your image generation service
       console.log("Generating image with style:", selectedStyle);
       console.log("Source image:", selectedImage.name);
       console.log("User:", user.email);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Step 1: Upload the image to fal storage
+      const formData = new FormData();
+      formData.append('file', selectedImage);
       
-      // For demo purposes, set a placeholder generated image
-      setGeneratedImage("https://via.placeholder.com/512x512?text=Generated+Image");
+      const uploadResponse = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!uploadResponse.ok) {
+        const errorData = await uploadResponse.json();
+        throw new Error(errorData.error || 'Failed to upload image');
+      }
+      
+      const uploadData = await uploadResponse.json();
+      const imageUrl = uploadData.url;
+      
+      console.log('Image uploaded to:', imageUrl);
+      
+      // Step 2: Generate the image using the fal-ai API
+      const generateResponse = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: `Transform this product image into an attractive ${imageStyles.find(s => s.id === selectedStyle)?.name.toLowerCase() || selectedStyle} style advertisement`,
+          imageUrls: [imageUrl],
+          style: imageStyles.find(s => s.id === selectedStyle)?.name || selectedStyle
+        }),
+      });
+      
+      if (!generateResponse.ok) {
+        const errorData = await generateResponse.json();
+        throw new Error(errorData.error || 'Failed to generate image');
+      }
+      
+      const generateData = await generateResponse.json();
+      
+      console.log('Generated image:', generateData);
+      
+      // Step 3: Set the generated image
+      setGeneratedImage(generateData.imageUrl);
       
       // Set default save title
       const timestamp = new Date().toLocaleString();
-      setSaveTitle(`${selectedStyle.name} - ${timestamp}`);
+      const styleName = imageStyles.find(s => s.id === selectedStyle)?.name || selectedStyle;
+      setSaveTitle(`${styleName} Ad - ${timestamp}`);
+      
     } catch (error) {
       console.error("Error generating image:", error);
+      // You might want to show a toast notification or error message to the user
+      alert(`Error generating image: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsGenerating(false);
     }
@@ -88,8 +129,8 @@ export default function Dashboard() {
         title: saveTitle.trim(),
         original_image_url: originalImageUrl!,
         generated_image_url: generatedImage,
-        style: selectedStyle.name,
-        prompt: `Generated ${selectedStyle.name} style image`
+        style: imageStyles.find(s => s.id === selectedStyle)?.name || selectedStyle,
+        prompt: `Generated ${imageStyles.find(s => s.id === selectedStyle)?.name || selectedStyle} style image`
       });
 
       if (error) {
