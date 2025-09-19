@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import { database, storage } from "@/lib/database";
 
 export default function Dashboard() {
@@ -176,21 +176,26 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center space-x-4">
+        <div className="flex justify-between items-center mb-12">
+          <div className="flex items-center space-x-6">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => router.push('/')}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 hover:bg-accent rounded-full px-4 py-2"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Home</span>
             </Button>
-            <div className="text-center flex-1">
-              <h1 className="text-4xl font-bold mb-2">AI Image Generator</h1>
+            <div className="text-left">
+              <div className="flex items-center space-x-3 mb-2">
+                <div className="bg-primary/10 p-2 rounded-full">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                </div>
+                <h1 className="text-3xl font-bold">AdCraft Studio</h1>
+              </div>
               <p className="text-muted-foreground text-lg">
-                Upload an image, choose a style, and generate amazing AI artwork
+                Transform your products into high-converting advertisements
               </p>
             </div>
           </div>
@@ -201,23 +206,23 @@ export default function Dashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="flex bg-muted p-1 rounded-lg">
+        <div className="flex justify-center mb-12">
+          <div className="flex bg-muted/50 p-1 rounded-full border border-border/50">
             <Button
               variant={activeTab === 'generate' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setActiveTab('generate')}
-              className="rounded-md"
+              className="rounded-full px-6 py-2 font-medium"
             >
-              Generate Images
+              Create Ads
             </Button>
             <Button
               variant={activeTab === 'saved' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setActiveTab('saved')}
-              className="rounded-md"
+              className="rounded-full px-6 py-2 font-medium"
             >
-              Saved Images
+              Ad Gallery
             </Button>
           </div>
         </div>
@@ -244,13 +249,13 @@ export default function Dashboard() {
                 {/* Save Title Input (shown when image is generated) */}
                 {generatedImage && (
                   <div className="space-y-2">
-                    <Label htmlFor="save-title">Save Title</Label>
+                    <Label htmlFor="save-title" className="text-sm font-medium">Advertisement Title</Label>
                     <Input
                       id="save-title"
                       value={saveTitle}
                       onChange={(e) => setSaveTitle(e.target.value)}
-                      placeholder="Enter a title for your generated image"
-                      className="w-full"
+                      placeholder="Enter a title for your advertisement"
+                      className="w-full rounded-xl border-border/50 focus:border-primary"
                     />
                   </div>
                 )}
@@ -267,27 +272,39 @@ export default function Dashboard() {
                 />
                 
                 {isGenerateDisabled && (
-                  <div className="text-center p-6 bg-muted rounded-lg border-2 border-dashed">
-                    <p className="text-muted-foreground mb-4">
-                      Please upload an image and select a style to generate your AI artwork
+                  <div className="text-center p-8 bg-muted/50 rounded-2xl border border-border/50">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Ready to create your ad?</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Upload your product image and select an ad style to get started
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-2 text-sm text-muted-foreground">
-                      <div className="flex items-center">
-                        <div className={`w-2 h-2 rounded-full mr-2 ${selectedImage ? 'bg-green-500' : 'bg-gray-300'}`} />
-                        Image {selectedImage ? 'uploaded' : 'required'}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center text-sm">
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className={`w-3 h-3 rounded-full ${selectedImage ? 'bg-green-500' : 'bg-gray-300'}`} />
+                        <span className={selectedImage ? 'text-green-600 font-medium' : 'text-muted-foreground'}>
+                          Product image {selectedImage ? 'uploaded' : 'required'}
+                        </span>
                       </div>
-                      <div className="flex items-center">
-                        <div className={`w-2 h-2 rounded-full mr-2 ${selectedStyle ? 'bg-green-500' : 'bg-gray-300'}`} />
-                        Style {selectedStyle ? 'selected' : 'required'}
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className={`w-3 h-3 rounded-full ${selectedStyle ? 'bg-green-500' : 'bg-gray-300'}`} />
+                        <span className={selectedStyle ? 'text-green-600 font-medium' : 'text-muted-foreground'}>
+                          Ad style {selectedStyle ? 'selected' : 'required'}
+                        </span>
                       </div>
                     </div>
                   </div>
                 )}
                 
                 {selectedImage && selectedStyle && !generatedImage && (
-                  <div className="text-center p-6 bg-primary/5 rounded-lg border">
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Ready to generate! Click the button above to create your AI artwork.
+                  <div className="text-center p-6 bg-primary/5 rounded-2xl border border-primary/20">
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Sparkles className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Everything looks good!</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Click the button above to generate your professional advertisement
                     </p>
                   </div>
                 )}

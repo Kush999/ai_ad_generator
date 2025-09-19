@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Image Generator",
-  description: "Generate amazing AI artwork with custom styles",
+  title: "AdCraft Studio - Professional AI Ad Generator",
+  description: "Transform your products into stunning professional advertisements with AI. Create beautiful marketing content that converts.",
 };
 
 export default function RootLayout({
