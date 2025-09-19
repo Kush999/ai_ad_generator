@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, Sparkles, Download } from "lucide-react";
+import { Loader2, Sparkles, Download, Heart, Save } from "lucide-react";
 import Image from "next/image";
 
 interface GenerateButtonProps {
@@ -11,6 +11,9 @@ interface GenerateButtonProps {
   isDisabled: boolean;
   generatedImage?: string | null;
   onDownload?: () => void;
+  onSave?: () => void;
+  isSaving?: boolean;
+  isSaved?: boolean;
 }
 
 export function GenerateButton({
@@ -18,7 +21,10 @@ export function GenerateButton({
   isGenerating,
   isDisabled,
   generatedImage,
-  onDownload
+  onDownload,
+  onSave,
+  isSaving = false,
+  isSaved = false
 }: GenerateButtonProps) {
   return (
     <Card className="p-6">
@@ -68,16 +74,44 @@ export function GenerateButton({
               </div>
             </div>
             
-            {onDownload && (
-              <Button
-                onClick={onDownload}
-                variant="secondary"
-                className="w-full"
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download Image
-              </Button>
-            )}
+            <div className="flex gap-2">
+              {onSave && (
+                <Button
+                  onClick={onSave}
+                  disabled={isSaving || isSaved}
+                  variant={isSaved ? "outline" : "default"}
+                  className="flex-1"
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : isSaved ? (
+                    <>
+                      <Heart className="mr-2 h-4 w-4 fill-current text-red-500" />
+                      Saved
+                    </>
+                  ) : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" />
+                      Save Image
+                    </>
+                  )}
+                </Button>
+              )}
+              
+              {onDownload && (
+                <Button
+                  onClick={onDownload}
+                  variant="secondary"
+                  className="flex-1"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>
