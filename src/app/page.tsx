@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AuthModal } from "@/components/auth/AuthModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, Award, BarChart3 } from "lucide-react";
+import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, Award, BarChart3, Check, X } from "lucide-react";
 
 export default function LandingPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -51,6 +51,7 @@ export default function LandingPage() {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
               <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">How it Works</a>
+              <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
               <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Success Stories</a>
             </div>
             <Button 
@@ -273,6 +274,150 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section id="pricing" className="container mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Choose your 
+            <span className="text-gradient">perfect plan</span>
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Start creating stunning ads for free, then upgrade when you're ready to scale your marketing
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Free Plan */}
+          <Card className="relative border-2 border-border/50 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            <CardHeader className="text-center pb-8">
+              <div className="mx-auto w-16 h-16 bg-muted/50 rounded-2xl flex items-center justify-center mb-6">
+                <Sparkles className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <CardTitle className="text-2xl mb-2">Free Starter</CardTitle>
+              <CardDescription className="text-base">Perfect for trying out AdCraft Studio</CardDescription>
+              <div className="mt-6">
+                <div className="text-4xl font-bold mb-2">$0</div>
+                <div className="text-muted-foreground">Forever free</div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">50 free credits (5 generations)</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">Download images in high resolution</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">All professional ad styles</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center">
+                    <X className="h-3 w-3 text-red-600" />
+                  </div>
+                  <span className="text-base text-muted-foreground">Save ads to gallery</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center">
+                    <X className="h-3 w-3 text-red-600" />
+                  </div>
+                  <span className="text-base text-muted-foreground">Team collaboration</span>
+                </div>
+              </div>
+              <Button 
+                onClick={() => setShowAuthModal(true)}
+                className="w-full h-12 rounded-full font-semibold bg-muted hover:bg-muted/80 text-foreground border-2 border-border"
+                variant="outline"
+              >
+                Start Free
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Pro Plan */}
+          <Card className="relative border-2 border-primary shadow-xl bg-card/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <div className="bg-primary text-primary-foreground px-6 py-2 rounded-full text-sm font-semibold">
+                Most Popular
+              </div>
+            </div>
+            <CardHeader className="text-center pb-8 pt-12">
+              <div className="mx-auto w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+                <Zap className="h-8 w-8 text-primary" />
+              </div>
+              <CardTitle className="text-2xl mb-2">Pro Creator</CardTitle>
+              <CardDescription className="text-base">For serious marketers and businesses</CardDescription>
+              <div className="mt-6">
+                <div className="text-4xl font-bold mb-2">$10</div>
+                <div className="text-muted-foreground">One-time payment</div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base font-medium">1,000 credits (100 generations)</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base font-medium">Save ads to your gallery</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">Download in any format & resolution</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">All professional ad styles</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">Edit & organize your ads</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="h-3 w-3 text-green-600" />
+                  </div>
+                  <span className="text-base">Priority generation speed</span>
+                </div>
+              </div>
+              <Button 
+                onClick={() => setShowAuthModal(true)}
+                className="w-full h-12 rounded-full font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
+              >
+                Upgrade to Pro
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Additional features note */}
+        <div className="text-center mt-12">
+          <p className="text-muted-foreground">
+            All plans include access to our AI-powered ad generation, professional templates, and regular updates
+          </p>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section id="testimonials" className="container mx-auto px-6 py-20">
         <div className="text-center mb-16">
@@ -333,7 +478,7 @@ export default function LandingPage() {
               Start Creating Ads for Free <Sparkles className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-sm text-muted-foreground mt-4">
-              No credit card required • 5 free ads to start • Cancel anytime
+              No credit card required • 50 free credits to start • $10 for 1,000 credits
             </p>
           </div>
         </div>

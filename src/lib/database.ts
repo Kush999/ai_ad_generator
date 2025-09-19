@@ -20,6 +20,15 @@ export interface CreateAdData {
   prompt?: string
 }
 
+export interface UserProfile {
+  id: string
+  user_id: string
+  credits: number
+  total_credits_purchased: number
+  created_at: string
+  updated_at: string
+}
+
 // Database functions for generated ads
 export const database = {
   // Get all ads for current user
@@ -98,6 +107,118 @@ export const database = {
       return { error }
     } catch (error) {
       return { error }
+    }
+  },
+
+  // Get user profile with credits
+  async getUserProfile(userId: string): Promise<{ data: UserProfile | null; error: any }> {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      return { data, error }
+    } catch (error) {
+      return { data: null, error }
+    }
+  },
+
+  // Create user profile (fallback if trigger doesn't work)
+  async createUserProfile(userId: string): Promise<{ data: UserProfile | null; error: any }> {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .insert({
+          user_id: userId,
+          credits: 50,
+          total_credits_purchased: 0
+        })
+        .select()
+        .single()
+
+      return { data, error }
+    } catch (error) {
+      return { data: null, error }
+    }
+  },
+
+  // Get or create user profile
+  async getOrCreateUserProfile(userId: string): Promise<{ data: UserProfile | null; error: any }> {
+    try {
+      // First try to get existing profile
+      let { data, error } = await this.getUserProfile(userId)
+      
+      // If profile doesn't exist, create it
+      if (error && error.code === 'PGRST116') {
+        const createResult = await this.createUserProfile(userId)
+        return createResult
+      }
+
+      return { data, error }
+    } catch (error) {
+      return { data: null, error }
+    }
+  },
+
+  // Deduct credits for image generation
+  async deductCredits(userId: string, creditsToDeduct: number = 10): Promise<{ data: UserProfile | null; error: any }> {
+    try {
+      // Get current credits
+      const { data: profile, error: getError } = await this.getOrCreateUserProfile(userId)
+      
+      if (getError || !profile) {
+        return { data: null, error: getError || new Error('Profile not found') }
+      }
+
+      // Check if user has enough credits
+      if (profile.credits < creditsToDeduct) {
+        return { data: null, error: new Error('Insufficient credits') }
+      }
+
+      // Deduct credits
+      const newCredits = profile.credits - creditsToDeduct
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({ credits: newCredits })
+        .eq('user_id', userId)
+        .select()
+        .single()
+
+      return { data, error }
+    } catch (error) {
+      return { data: null, error }
+    }
+  },
+
+  // Add credits (for purchases)
+  async addCredits(userId: string, creditsToAdd: number): Promise<{ data: UserProfile | null; error: any }> {
+    try {
+      // Get current profile
+      const { data: profile, error: getError } = await this.getOrCreateUserProfile(userId)
+      
+      if (getError || !profile) {
+        return { data: null, error: getError || new Error('Profile not found') }
+      }
+
+      // Add credits
+      const newCredits = profile.credits + creditsToAdd
+      const newTotalPurchased = profile.total_credits_purchased + creditsToAdd
+      
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({ 
+          credits: newCredits,
+          total_credits_purchased: newTotalPurchased
+        })
+        .eq('user_id', userId)
+        .select()
+        .single()
+
+      return { data, error }
+    } catch (error) {
+      return { data: null, error }
     }
   }
 }

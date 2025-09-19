@@ -6,6 +6,8 @@ import { StyleSelector, ImageStyle, imageStyles } from "@/components/StyleSelect
 import { GenerateButton } from "@/components/GenerateButton";
 import { SavedImages } from "@/components/SavedImages";
 import { UserMenu } from "@/components/auth/UserMenu";
+import { CreditsDisplay } from "@/components/CreditsDisplay";
+import { PurchaseCreditsModal } from "@/components/PurchaseCreditsModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +26,8 @@ export default function Dashboard() {
   const [saveTitle, setSaveTitle] = useState("");
   const [activeTab, setActiveTab] = useState<'generate' | 'saved'>('generate');
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [creditsRefreshKey, setCreditsRefreshKey] = useState(0);
 
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -52,6 +56,27 @@ export default function Dashboard() {
       console.log("Generating image with style:", selectedStyle);
       console.log("Source image:", selectedImage.name);
       console.log("User:", user.email);
+      
+      // First, deduct credits before generating
+      console.log("Deducting 10 credits for image generation...");
+      const { data: updatedProfile, error: creditError } = await database.deductCredits(user.id, 10);
+      
+      if (creditError) {
+        console.error("Error deducting credits:", creditError);
+        if (creditError.message === 'Insufficient credits') {
+          alert('❌ You don\'t have enough credits to generate an image. You need 10 credits per generation.');
+          setShowPurchaseModal(true);
+          return;
+        } else {
+          alert('Failed to process credits. Please try again.');
+          return;
+        }
+      }
+      
+      console.log("Credits deducted successfully. Remaining credits:", updatedProfile?.credits);
+      
+      // Refresh credits display
+      setCreditsRefreshKey(prev => prev + 1);
       
       // Step 1: Upload the image to fal storage
       const formData = new FormData();
@@ -112,6 +137,17 @@ export default function Dashboard() {
       
     } catch (error) {
       console.error("Error generating image:", error);
+      
+      // Refund credits if generation failed
+      try {
+        console.log("Refunding 10 credits due to generation failure...");
+        await database.addCredits(user.id, 10);
+        setCreditsRefreshKey(prev => prev + 1);
+        console.log("Credits refunded successfully");
+      } catch (refundError) {
+        console.error("Error refunding credits:", refundError);
+      }
+      
       // You might want to show a toast notification or error message to the user
       alert(`Error generating image: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
@@ -178,7 +214,6 @@ export default function Dashboard() {
         setIsSaved(true);
         setRefreshKey(prev => prev + 1); // Trigger refresh of saved images
         console.log("Ad saved successfully:", data);
-        alert('Advertisement saved successfully! You can view it in the Ad Gallery.');
       }
     } catch (error) {
       console.error("Error saving ad:", error);
@@ -260,6 +295,10 @@ export default function Dashboard() {
           </div>
           
           <div className="flex items-center gap-4">
+            <CreditsDisplay 
+              key={creditsRefreshKey}
+              onPurchaseClick={() => setShowPurchaseModal(true)} 
+            />
             <UserMenu />
           </div>
         </div>
@@ -377,6 +416,15 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Purchase Credits Modal */}
+      <PurchaseCreditsModal
+        isOpen={showPurchaseModal}
+        onClose={() => setShowPurchaseModal(false)}
+        onPurchaseComplete={() => {
+          setCreditsRefreshKey(prev => prev + 1);
+        }}
+      />
     </div>
   );
 }
