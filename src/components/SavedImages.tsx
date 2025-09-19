@@ -10,9 +10,10 @@ import { Input } from '@/components/ui/input'
 
 interface SavedImagesProps {
   onRefresh?: () => void
+  refreshTrigger?: number // Add a trigger to force refresh
 }
 
-export function SavedImages({ onRefresh }: SavedImagesProps) {
+export function SavedImages({ onRefresh, refreshTrigger }: SavedImagesProps) {
   const [savedAds, setSavedAds] = useState<GeneratedAd[]>([])
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -25,15 +26,24 @@ export function SavedImages({ onRefresh }: SavedImagesProps) {
     }
   }, [user])
 
+  // Refresh when refreshTrigger changes
+  useEffect(() => {
+    if (user && refreshTrigger !== undefined) {
+      loadSavedAds()
+    }
+  }, [user, refreshTrigger])
+
   const loadSavedAds = async () => {
     if (!user) return
     
     setLoading(true)
     try {
+      console.log('Loading saved ads for user:', user.id)
       const { data, error } = await database.getUserAds(user.id)
       if (error) {
         console.error('Error loading saved ads:', error)
       } else {
+        console.log('Loaded saved ads:', data)
         setSavedAds(data || [])
       }
     } catch (error) {
@@ -81,17 +91,26 @@ export function SavedImages({ onRefresh }: SavedImagesProps) {
   const handleDownload = async (imageUrl: string, title: string) => {
     try {
       const response = await fetch(imageUrl)
+      if (!response.ok) {
+        throw new Error('Failed to fetch image')
+      }
+      
       const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${title}.png`
+      
+      // Clean the title for use as filename
+      const cleanTitle = title.replace(/[^a-z0-9]/gi, '-').toLowerCase()
+      a.download = `${cleanTitle}.png`
+      
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
       document.body.removeChild(a)
     } catch (error) {
       console.error('Error downloading image:', error)
+      alert('Failed to download image. Please try again.')
     }
   }
 

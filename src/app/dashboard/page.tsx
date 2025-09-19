@@ -35,11 +35,11 @@ export default function Dashboard() {
     }
   }, [user, loading, router]);
 
-  // Reset save state when generating new image or changing inputs
+  // Reset save state when changing inputs (but not when generating new image)
   useEffect(() => {
     setIsSaved(false);
     setSaveTitle("");
-  }, [selectedImage, selectedStyle, generatedImage]);
+  }, [selectedImage, selectedStyle]);
 
   const handleGenerate = async () => {
     if (!selectedImage || !selectedStyle || !user) return;
@@ -94,13 +94,21 @@ export default function Dashboard() {
       
       console.log('Generated image:', generateData);
       
-      // Step 3: Set the generated image
+      // Step 3: Set the generated image and reset save state
       setGeneratedImage(generateData.imageUrl);
+      setIsSaved(false); // Reset save state for new image
       
       // Set default save title
       const timestamp = new Date().toLocaleString();
       const styleName = imageStyles.find(s => s.id === selectedStyle)?.name || selectedStyle;
-      setSaveTitle(`${styleName} Ad - ${timestamp}`);
+      const newTitle = `${styleName} Ad - ${timestamp}`;
+      setSaveTitle(newTitle);
+      
+      console.log('Generated image successfully:', {
+        imageUrl: generateData.imageUrl,
+        newTitle: newTitle,
+        style: styleName
+      });
       
     } catch (error) {
       console.error("Error generating image:", error);
@@ -112,7 +120,36 @@ export default function Dashboard() {
   };
 
   const handleSave = async () => {
-    if (!generatedImage || !selectedImage || !selectedStyle || !user || !saveTitle.trim()) return;
+    // Debug logging to help identify the issue
+    console.log('Save validation check:', {
+      generatedImage: !!generatedImage,
+      selectedImage: !!selectedImage,
+      selectedStyle: !!selectedStyle,
+      user: !!user,
+      saveTitle: saveTitle,
+      saveTitleTrimmed: saveTitle.trim()
+    });
+
+    if (!generatedImage) {
+      alert('No generated image to save. Please generate an image first.');
+      return;
+    }
+    if (!selectedImage) {
+      alert('Original image is missing. Please upload an image and regenerate.');
+      return;
+    }
+    if (!selectedStyle) {
+      alert('Style is missing. Please select a style and regenerate.');
+      return;
+    }
+    if (!user) {
+      alert('You must be logged in to save images.');
+      return;
+    }
+    if (!saveTitle.trim()) {
+      alert('Please enter a title for your advertisement.');
+      return;
+    }
     
     setIsSaving(true);
     try {
@@ -121,6 +158,7 @@ export default function Dashboard() {
       
       if (uploadError) {
         console.error("Error uploading original image:", uploadError);
+        alert('Failed to upload original image. Please try again.');
         return;
       }
 
@@ -135,22 +173,43 @@ export default function Dashboard() {
 
       if (error) {
         console.error("Error saving ad:", error);
+        alert('Failed to save advertisement. Please try again.');
       } else {
         setIsSaved(true);
         setRefreshKey(prev => prev + 1); // Trigger refresh of saved images
         console.log("Ad saved successfully:", data);
+        alert('Advertisement saved successfully! You can view it in the Ad Gallery.');
       }
     } catch (error) {
       console.error("Error saving ad:", error);
+      alert('An unexpected error occurred while saving. Please try again.');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleDownload = () => {
-    if (generatedImage) {
-      // TODO: Implement actual download functionality
-      console.log("Downloading image:", generatedImage);
+  const handleDownload = async () => {
+    if (!generatedImage) return;
+    
+    try {
+      const response = await fetch(generatedImage);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      
+      // Create a meaningful filename
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      const styleName = imageStyles.find(s => s.id === selectedStyle)?.name || selectedStyle || 'advertisement';
+      a.download = `${styleName.toLowerCase().replace(/\s+/g, '-')}-${timestamp}.png`;
+      
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading image:', error);
+      alert('Failed to download image. Please try again.');
     }
   };
 
@@ -311,7 +370,10 @@ export default function Dashboard() {
               </div>
             </div>
           ) : (
-            <SavedImages key={refreshKey} onRefresh={() => setRefreshKey(prev => prev + 1)} />
+            <SavedImages 
+              refreshTrigger={refreshKey} 
+              onRefresh={() => setRefreshKey(prev => prev + 1)} 
+            />
           )}
         </div>
       </div>
