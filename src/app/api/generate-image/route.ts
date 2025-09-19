@@ -27,16 +27,22 @@ export async function POST(request: NextRequest) {
 
     // Create a comprehensive prompt based on the style and user input
     const stylePrompts = {
-      'Modern': 'Create a modern, clean, minimalist advertisement with sleek design elements',
-      'Vintage': 'Create a vintage-style advertisement with retro colors and classic typography',
-      'Bold': 'Create a bold, eye-catching advertisement with vibrant colors and strong contrasts',
-      'Elegant': 'Create an elegant, sophisticated advertisement with refined aesthetics',
-      'Playful': 'Create a playful, fun advertisement with bright colors and dynamic elements',
-      'Professional': 'Create a professional, corporate-style advertisement with clean lines'
+      'Luxury': 'Generate a luxury Instagram ad of this product with dramatic spotlight lighting, glossy reflections, dark black background, and elegant serif typography.',
+      'Minimalist': 'Create a minimalist ad of this product with a clean white background, soft shadows, lots of negative space, and modern sans-serif text.',
+      'Bold & Vibrant': 'Design a bold ad of this product with bright neon colors, geometric patterns, and large playful typography that instantly grabs attention.',
+      'Lifestyle': 'Generate a lifestyle ad showing this product being used naturally in a cozy, aspirational real-world environment, with warm lighting and authentic candid vibes.',
+      'Retro / Vintage': 'Create a vintage-style ad of this product with grainy film textures, retro color grading, and nostalgic fonts reminiscent of 70s print ads.',
+      'Playful / Cartoonish': 'Make a fun cartoon-inspired ad of this product with doodles, bright hand-drawn elements, and cheerful playful fonts.',
+      'Eco / Natural': 'Generate a nature-inspired ad of this product with earthy tones, plants, wooden textures, and organic fonts for a sustainable eco vibe.',
+      'Tech / Futuristic': 'Create a futuristic ad of this product with glowing neon edges, holographic effects, and high-tech typography on a sleek dark background.',
+      'Holiday / Festive': 'Design a festive ad of this product with Christmas lights, cozy holiday decor, red and green color palette, and cheerful seasonal typography.',
+      'Meme-Style': 'Place this product inside a trending meme template with bold Impact font text, humorous context, and viral social media style.',
+      '3D Cinematic Render': 'Generate a hyper-realistic 3D cinematic render of this product with dramatic studio lighting, glossy reflections, and ultra-detailed textures.',
+      'Magazine Editorial': 'Create a fashion-magazine style ad of this product with glossy textures, minimal high-end typography, and a sophisticated editorial layout.'
     };
 
-    const stylePrompt = stylePrompts[style as keyof typeof stylePrompts] || 'Create a stylish advertisement';
-    const fullPrompt = `${stylePrompt}. ${prompt}. Make it look like a professional advertisement with the product prominently featured.`;
+    const stylePrompt = stylePrompts[style as keyof typeof stylePrompts] || 'Create a stylish advertisement of this product';
+    const fullPrompt = `${stylePrompt} ${prompt}`;
 
     console.log('Generating image with prompt:', fullPrompt);
     console.log('Image URLs:', imageUrls);

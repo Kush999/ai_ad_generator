@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Loader2, Sparkles, Download, Heart, Save, Zap } from "lucide-react";
 import Image from "next/image";
+import { InstagramPreview } from "@/components/InstagramPreview";
+import { ImageStyle } from "@/components/StyleSelector";
 
 interface GenerateButtonProps {
   onGenerate: () => void;
   isGenerating: boolean;
   isDisabled: boolean;
   generatedImage?: string | null;
+  selectedStyle?: ImageStyle | null;
   onDownload?: () => void;
   onSave?: () => void;
   isSaving?: boolean;
@@ -21,6 +24,7 @@ export function GenerateButton({
   isGenerating,
   isDisabled,
   generatedImage,
+  selectedStyle,
   onDownload,
   onSave,
   isSaving = false,
@@ -64,25 +68,21 @@ export function GenerateButton({
           )}
         </div>
 
-        {generatedImage && (
+        {generatedImage && selectedStyle && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="inline-flex items-center space-x-2 bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <div className="inline-flex items-center space-x-2 bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
                 <Sparkles className="h-4 w-4" />
                 <span>Advertisement Created!</span>
               </div>
             </div>
             
-            <div className="border border-border/50 rounded-2xl overflow-hidden shadow-lg">
-              <div className="relative aspect-square max-w-md mx-auto">
-                <Image
-                  src={generatedImage}
-                  alt="Generated advertisement"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
+            {/* Instagram Preview */}
+            <InstagramPreview 
+              imageUrl={generatedImage}
+              selectedStyle={selectedStyle}
+              onDownload={onDownload}
+            />
             
             <div className="flex gap-3">
               {onSave && (

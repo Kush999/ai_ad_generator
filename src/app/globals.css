@@ -157,3 +157,13 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Better text wrapping for style selector */
+.break-words {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+}

@@ -365,6 +365,7 @@ export default function Dashboard() {
                   isGenerating={isGenerating}
                   isDisabled={isGenerateDisabled}
                   generatedImage={generatedImage}
+                  selectedStyle={selectedStyle}
                   onDownload={handleDownload}
                   onSave={generatedImage ? handleSave : undefined}
                   isSaving={isSaving}
