@@ -53,24 +53,73 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode variables */
+[data-theme="dark"] {
+  /* Dark background with subtle purple tint */
+  --background: #0F0A1A;
+  --foreground: #F1F5F9;
+  
+  /* Vibrant purple for dark mode */
+  --primary: #A855F7;
+  --primary-foreground: #ffffff;
+  
+  /* Dark muted colors */
+  --muted: #1E1B2E;
+  --muted-foreground: #94A3B8;
+  
+  /* Dark card backgrounds */
+  --card: #1A1625;
+  --card-foreground: #F1F5F9;
+  
+  /* Dark borders */
+  --border: #2D2A3D;
+  --input: #2D2A3D;
+  
+  /* Dark accent colors */
+  --accent: #252138;
+  --accent-foreground: #F1F5F9;
+  
+  /* Dark secondary colors */
+  --secondary: #1E1B2E;
+  --secondary-foreground: #CBD5E1;
+  
+  /* Focus ring for dark mode */
+  --ring: #A855F7;
+}
+
+/* Default to light mode, respect system preference */
 @media (prefers-color-scheme: dark) {
-  :root {
-    /* Keep the same professional look even in dark mode preference */
-    --background: #FBF9F5;
-    --foreground: #1a1a1a;
-    --primary: #8B5CF6;
+  :root:not([data-theme="light"]) {
+    /* Dark background with subtle purple tint */
+    --background: #0F0A1A;
+    --foreground: #F1F5F9;
+    
+    /* Vibrant purple for dark mode */
+    --primary: #A855F7;
     --primary-foreground: #ffffff;
-    --muted: #F5F2ED;
-    --muted-foreground: #6B7280;
-    --card: #FFFFFF;
-    --card-foreground: #1a1a1a;
-    --border: #E5E7EB;
-    --input: #E5E7EB;
-    --accent: #F3F4F6;
-    --accent-foreground: #1a1a1a;
-    --secondary: #F9FAFB;
-    --secondary-foreground: #374151;
-    --ring: #8B5CF6;
+    
+    /* Dark muted colors */
+    --muted: #1E1B2E;
+    --muted-foreground: #94A3B8;
+    
+    /* Dark card backgrounds */
+    --card: #1A1625;
+    --card-foreground: #F1F5F9;
+    
+    /* Dark borders */
+    --border: #2D2A3D;
+    --input: #2D2A3D;
+    
+    /* Dark accent colors */
+    --accent: #252138;
+    --accent-foreground: #F1F5F9;
+    
+    /* Dark secondary colors */
+    --secondary: #1E1B2E;
+    --secondary-foreground: #CBD5E1;
+    
+    /* Focus ring for dark mode */
+    --ring: #A855F7;
   }
 }
 
@@ -99,4 +148,12 @@ html {
 *:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

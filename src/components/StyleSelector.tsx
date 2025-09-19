@@ -65,37 +65,51 @@ interface StyleSelectorProps {
 export function StyleSelector({ selectedStyle, onStyleSelect }: StyleSelectorProps) {
   return (
     <Card className="p-6">
-      <div className="space-y-4">
-        <Label className="text-base font-medium">
+      <div className="space-y-6">
+        <Label className="text-lg font-semibold">
           Choose Art Style
         </Label>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {imageStyles.map((style) => (
-            <Button
+            <div
               key={style.id}
-              variant={selectedStyle === style.id ? "default" : "outline"}
-              className="h-auto p-4 flex flex-col items-center gap-2 text-center"
-              onClick={() => onStyleSelect(style.id)}
+              className="relative"
             >
-              <span className="text-2xl" role="img" aria-label={style.name}>
-                {style.preview}
-              </span>
-              <div className="space-y-1">
-                <div className="font-medium text-sm">{style.name}</div>
-                <div className="text-xs opacity-70 leading-tight">
-                  {style.description}
-                </div>
-              </div>
-            </Button>
+              <Button
+                variant={selectedStyle === style.id ? "default" : "outline"}
+                className={`
+                  w-full h-20 p-3 flex flex-col items-center justify-center
+                  border-2 transition-all duration-200 hover:shadow-md
+                  ${selectedStyle === style.id 
+                    ? 'bg-primary text-primary-foreground border-primary shadow-lg' 
+                    : 'bg-card hover:bg-accent border-border hover:border-primary/50'
+                  }
+                `}
+                onClick={() => onStyleSelect(style.id)}
+              >
+                <span className="text-2xl mb-1" role="img" aria-label={style.name}>
+                  {style.preview}
+                </span>
+                <span className="text-xs font-medium text-center leading-tight">
+                  {style.name}
+                </span>
+              </Button>
+              
+            </div>
           ))}
         </div>
         
         {selectedStyle && (
-          <div className="p-3 bg-muted rounded-lg">
-            <p className="text-sm">
-              <span className="font-medium">Selected:</span>{" "}
-              {imageStyles.find(s => s.id === selectedStyle)?.name}
+          <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+            <div className="flex items-center gap-2">
+              <span className="text-primary font-medium">Selected Style:</span>
+              <span className="font-semibold">
+                {imageStyles.find(s => s.id === selectedStyle)?.name}
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              {imageStyles.find(s => s.id === selectedStyle)?.description}
             </p>
           </div>
         )}

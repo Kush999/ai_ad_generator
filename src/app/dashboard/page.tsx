@@ -8,6 +8,7 @@ import { SavedImages } from "@/components/SavedImages";
 import { UserMenu } from "@/components/auth/UserMenu";
 import { CreditsDisplay } from "@/components/CreditsDisplay";
 import { PurchaseCreditsModal } from "@/components/PurchaseCreditsModal";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -294,11 +295,12 @@ export default function Dashboard() {
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <CreditsDisplay 
               key={creditsRefreshKey}
               onPurchaseClick={() => setShowPurchaseModal(true)} 
             />
+            <ThemeToggle />
             <UserMenu />
           </div>
         </div>

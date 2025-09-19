@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, Award, BarChart3, Check, X } from "lucide-react";
@@ -54,12 +55,15 @@ export default function LandingPage() {
               <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
               <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Success Stories</a>
             </div>
-            <Button 
-              onClick={() => setShowAuthModal(true)}
-              className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
-            >
-              Get Started
-            </Button>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <Button 
+                onClick={() => setShowAuthModal(true)}
+                className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
