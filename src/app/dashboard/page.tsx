@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { database, storage } from "@/lib/database";
 
@@ -32,6 +32,7 @@ export default function Dashboard() {
 
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Redirect unauthenticated users to landing page
   useEffect(() => {
@@ -45,6 +46,33 @@ export default function Dashboard() {
     setIsSaved(false);
     setSaveTitle("");
   }, [selectedImage, selectedStyle]);
+
+  // Handle payment success/failure from Stripe
+  useEffect(() => {
+    const paymentStatus = searchParams.get('payment');
+    const sessionId = searchParams.get('session_id');
+    
+    if (paymentStatus === 'success') {
+      console.log('Payment successful! Session ID:', sessionId);
+      
+      // Refresh credits display
+      setCreditsRefreshKey(prev => prev + 1);
+      
+      // Show success message
+      alert('🎉 Payment successful! Your credits have been added to your account.');
+      
+      // Clean up URL parameters
+      router.replace('/dashboard');
+    } else if (paymentStatus === 'cancelled') {
+      console.log('Payment was cancelled by user');
+      
+      // Show cancelled message
+      alert('Payment was cancelled. You can try again anytime from the credits section.');
+      
+      // Clean up URL parameters
+      router.replace('/dashboard');
+    }
+  }, [searchParams, router]);
 
   const handleGenerate = async () => {
     if (!selectedImage || !selectedStyle || !user) return;

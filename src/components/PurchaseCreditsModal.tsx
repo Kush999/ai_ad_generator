@@ -24,31 +24,42 @@ export function PurchaseCreditsModal({ isOpen, onClose, onPurchaseComplete }: Pu
     
     setPurchasing(true)
     try {
-      // In a real app, you would integrate with Stripe or another payment processor
-      // For now, we'll simulate the purchase by adding credits directly
+      console.log('Creating Stripe checkout session for user:', user.id)
       
-      // Simulate payment processing delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Add 1000 credits (100 generations)
-      const { data, error } = await database.addCredits(user.id, 1000)
-      
-      if (error) {
-        console.error('Error adding credits:', error)
-        alert('Failed to add credits. Please try again.')
-      } else {
-        console.log('Credits added successfully:', data)
-        onPurchaseComplete?.()
-        onClose()
-        // Show success message
-        alert('🎉 Credits purchased successfully! You now have 1000 additional credits.')
+      // Create Stripe checkout session
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          credits: 1000, // 1000 credits for $10
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        console.error('Checkout API error:', data.error)
+        throw new Error(data.error || 'Failed to create checkout session')
       }
+
+      console.log('Checkout session created, redirecting to:', data.url)
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        throw new Error('No checkout URL received from Stripe')
+      }
+
     } catch (error) {
-      console.error('Error processing purchase:', error)
-      alert('An error occurred while processing your purchase. Please try again.')
-    } finally {
+      console.error('Error creating checkout session:', error)
+      alert(`Payment setup failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`)
       setPurchasing(false)
     }
+    // Note: We don't set setPurchasing(false) in the success case because the user will be redirected
   }
 
   return (
