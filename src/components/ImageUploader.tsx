@@ -9,11 +9,11 @@ import { Upload, X } from "lucide-react";
 import Image from "next/image";
 
 interface ImageUploaderProps {
-  onImageSelect: (file: File) => void;
+  onImageSelect: (file: File | null) => void;
   selectedImage: File | null;
 }
 
-export function ImageUploader({ onImageSelect, selectedImage }: ImageUploaderProps) {
+export function ImageUploader({ onImageSelect }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -62,7 +62,7 @@ export function ImageUploader({ onImageSelect, selectedImage }: ImageUploaderPro
 
   const removeImage = () => {
     setPreview(null);
-    onImageSelect(null as any);
+    onImageSelect(null);
   };
 
   return (

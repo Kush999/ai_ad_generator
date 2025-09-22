@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthModal } from "@/components/auth/AuthModal";
@@ -8,7 +8,7 @@ import { UserMenu } from "@/components/auth/UserMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, Award, BarChart3, Check, X } from "lucide-react";
+import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, BarChart3, Check, X } from "lucide-react";
 import { ImageComparison } from "@/components/ui/image-comparison-slider";
 import { HeroWithMockup } from "@/components/ui/hero-with-mockup";
 import { Logo } from "@/components/Logo";
@@ -331,7 +331,7 @@ export default function LandingPage() {
                 </div>
                 <CardTitle className="text-xl mb-3">Multi-Platform Ready</CardTitle>
                 <CardDescription className="text-base leading-relaxed">
-                  Generate ads optimized for Facebook, Instagram, Google Ads, and any other platform you're advertising on.
+                  Generate ads optimized for Facebook, Instagram, Google Ads, and any other platform you&apos;re advertising on.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -343,7 +343,7 @@ export default function LandingPage() {
                 </div>
                 <CardTitle className="text-xl mb-3">High-Res Downloads</CardTitle>
                 <CardDescription className="text-base leading-relaxed">
-                  Download your ads in any format and resolution you need. From social media to billboards, we've got you covered.
+                  Download your ads in any format and resolution you need. From social media to billboards, we&apos;ve got you covered.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -359,7 +359,7 @@ export default function LandingPage() {
             <span className="text-gradient"> perfect plan</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Start creating stunning ads for free, then upgrade when you're ready to scale your marketing
+            Start creating stunning ads for free, then upgrade when you&apos;re ready to scale your marketing
           </p>
         </div>
         
@@ -520,8 +520,8 @@ export default function LandingPage() {
 
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-8">
-            "AdCraft Studio transformed our entire creative workflow. What used to take our team days now takes minutes. 
-            Our conversion rates increased by 285% after switching to AI-generated ads."
+            &ldquo;AdCraft Studio transformed our entire creative workflow. What used to take our team days now takes minutes. 
+            Our conversion rates increased by 285% after switching to AI-generated ads.&rdquo;
           </p>
           <div className="flex items-center justify-center space-x-4">
             <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">

@@ -65,8 +65,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           onClose()
         }
       }
-    } catch (error: any) {
-      setMessage(error.message || 'An unexpected error occurred')
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'An unexpected error occurred')
     } finally {
       setLoading(false)
     }

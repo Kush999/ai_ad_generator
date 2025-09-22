@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Loader2, Sparkles, Download, Heart, Save, Zap } from "lucide-react";
-import Image from "next/image";
 import { InstagramPreview } from "@/components/InstagramPreview";
 import { ImageStyle } from "@/components/StyleSelector";
 

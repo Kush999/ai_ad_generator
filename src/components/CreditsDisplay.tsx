@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Coins, Plus, ShoppingCart, Loader2 } from 'lucide-react'
+import { Coins, Plus, Loader2 } from 'lucide-react'
 import { database, UserProfile } from '@/lib/database'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -20,9 +20,9 @@ export function CreditsDisplay({ onPurchaseClick }: CreditsDisplayProps) {
     if (user) {
       loadUserProfile()
     }
-  }, [user])
+  }, [user, loadUserProfile])
 
-  const loadUserProfile = async () => {
+  const loadUserProfile = useCallback(async () => {
     if (!user) return
     
     setLoading(true)
@@ -38,12 +38,8 @@ export function CreditsDisplay({ onPurchaseClick }: CreditsDisplayProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
-  // Function to update credits display after generation
-  const updateCredits = async () => {
-    await loadUserProfile()
-  }
 
   if (loading) {
     return (

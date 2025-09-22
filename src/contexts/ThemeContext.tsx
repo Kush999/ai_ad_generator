@@ -48,7 +48,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setTheme(initialTheme);
       updateResolvedTheme(initialTheme);
     }
-  }, []);
+  }, [updateResolvedTheme]);
 
   // Listen for system theme changes
   useEffect(() => {
@@ -63,7 +63,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       mediaQuery.addEventListener("change", handleChange);
       return () => mediaQuery.removeEventListener("change", handleChange);
     }
-  }, [theme]);
+  }, [theme, updateResolvedTheme]);
 
   // Update theme
   const handleSetTheme = (newTheme: Theme) => {

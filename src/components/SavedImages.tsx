@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Heart, Trash2, Download, Edit2, X, Check } from 'lucide-react'
@@ -24,16 +24,16 @@ export function SavedImages({ onRefresh, refreshTrigger }: SavedImagesProps) {
     if (user) {
       loadSavedAds()
     }
-  }, [user])
+  }, [user, loadSavedAds])
 
   // Refresh when refreshTrigger changes
   useEffect(() => {
     if (user && refreshTrigger !== undefined) {
       loadSavedAds()
     }
-  }, [user, refreshTrigger])
+  }, [user, refreshTrigger, loadSavedAds])
 
-  const loadSavedAds = async () => {
+  const loadSavedAds = useCallback(async () => {
     if (!user) return
     
     setLoading(true)
@@ -51,7 +51,7 @@ export function SavedImages({ onRefresh, refreshTrigger }: SavedImagesProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   const handleDelete = async (adId: string) => {
     if (!user) return

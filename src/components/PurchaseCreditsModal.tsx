@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { X, Coins, Check, Zap, CreditCard, Loader2 } from 'lucide-react'
-import { database } from '@/lib/database'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface PurchaseCreditsModalProps {
@@ -13,7 +12,7 @@ interface PurchaseCreditsModalProps {
   onPurchaseComplete?: () => void
 }
 
-export function PurchaseCreditsModal({ isOpen, onClose, onPurchaseComplete }: PurchaseCreditsModalProps) {
+export function PurchaseCreditsModal({ isOpen, onClose }: PurchaseCreditsModalProps) {
   const [purchasing, setPurchasing] = useState(false)
   const { user } = useAuth()
 
@@ -132,7 +131,7 @@ export function PurchaseCreditsModal({ isOpen, onClose, onPurchaseComplete }: Pu
               <span className="text-sm font-medium">Best Value</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              That's only $0.10 per advertisement - much cheaper than hiring a designer!
+              That&apos;s only $0.10 per advertisement - much cheaper than hiring a designer!
             </p>
           </div>
 

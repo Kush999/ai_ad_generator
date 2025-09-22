@@ -32,7 +32,7 @@ export interface UserProfile {
 // Database functions for generated ads
 export const database = {
   // Get all ads for current user
-  async getUserAds(userId: string): Promise<{ data: GeneratedAd[] | null; error: any }> {
+  async getUserAds(userId: string): Promise<{ data: GeneratedAd[] | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('generated_ads')
@@ -47,7 +47,7 @@ export const database = {
   },
 
   // Save a new generated ad
-  async saveAd(userId: string, adData: CreateAdData): Promise<{ data: GeneratedAd | null; error: any }> {
+  async saveAd(userId: string, adData: CreateAdData): Promise<{ data: GeneratedAd | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('generated_ads')
@@ -66,7 +66,7 @@ export const database = {
   },
 
   // Delete an ad
-  async deleteAd(adId: string, userId: string): Promise<{ error: any }> {
+  async deleteAd(adId: string, userId: string): Promise<{ error: Error | null }> {
     try {
       const { error } = await supabase
         .from('generated_ads')
@@ -81,7 +81,7 @@ export const database = {
   },
 
   // Toggle favorite status
-  async toggleFavorite(adId: string, userId: string, isFavorite: boolean): Promise<{ error: any }> {
+  async toggleFavorite(adId: string, userId: string, isFavorite: boolean): Promise<{ error: Error | null }> {
     try {
       const { error } = await supabase
         .from('generated_ads')
@@ -96,7 +96,7 @@ export const database = {
   },
 
   // Update ad title
-  async updateAdTitle(adId: string, userId: string, title: string): Promise<{ error: any }> {
+  async updateAdTitle(adId: string, userId: string, title: string): Promise<{ error: Error | null }> {
     try {
       const { error } = await supabase
         .from('generated_ads')
@@ -111,7 +111,7 @@ export const database = {
   },
 
   // Get user profile with credits
-  async getUserProfile(userId: string): Promise<{ data: UserProfile | null; error: any }> {
+  async getUserProfile(userId: string): Promise<{ data: UserProfile | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('user_profiles')
@@ -126,7 +126,7 @@ export const database = {
   },
 
   // Create user profile (fallback if trigger doesn't work)
-  async createUserProfile(userId: string): Promise<{ data: UserProfile | null; error: any }> {
+  async createUserProfile(userId: string): Promise<{ data: UserProfile | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
         .from('user_profiles')
@@ -145,10 +145,10 @@ export const database = {
   },
 
   // Get or create user profile
-  async getOrCreateUserProfile(userId: string): Promise<{ data: UserProfile | null; error: any }> {
+  async getOrCreateUserProfile(userId: string): Promise<{ data: UserProfile | null; error: Error | null }> {
     try {
       // First try to get existing profile
-      let { data, error } = await this.getUserProfile(userId)
+      const { data, error } = await this.getUserProfile(userId)
       
       // If profile doesn't exist, create it
       if (error && error.code === 'PGRST116') {
@@ -163,7 +163,7 @@ export const database = {
   },
 
   // Deduct credits for image generation
-  async deductCredits(userId: string, creditsToDeduct: number = 10): Promise<{ data: UserProfile | null; error: any }> {
+  async deductCredits(userId: string, creditsToDeduct: number = 10): Promise<{ data: UserProfile | null; error: Error | null }> {
     try {
       // Get current credits
       const { data: profile, error: getError } = await this.getOrCreateUserProfile(userId)
@@ -193,7 +193,7 @@ export const database = {
   },
 
   // Add credits (for purchases)
-  async addCredits(userId: string, creditsToAdd: number): Promise<{ data: UserProfile | null; error: any }> {
+  async addCredits(userId: string, creditsToAdd: number): Promise<{ data: UserProfile | null; error: Error | null }> {
     try {
       console.log(`Adding ${creditsToAdd} credits to user ${userId}`);
 
@@ -201,7 +201,7 @@ export const database = {
       const db = supabaseAdmin ?? supabase
 
       // Fetch existing profile without RLS restrictions when using admin
-      let { data: profile, error: getError } = await db
+      const { data: profile, error: getError } = await db
         .from('user_profiles')
         .select('*')
         .eq('user_id', userId)
@@ -268,12 +268,12 @@ export const database = {
 // Storage functions for handling image uploads
 export const storage = {
   // Upload original image to Supabase storage
-  async uploadOriginalImage(file: File, userId: string): Promise<{ data: string | null; error: any }> {
+  async uploadOriginalImage(file: File, userId: string): Promise<{ data: string | null; error: Error | null }> {
     try {
       const fileExt = file.name.split('.').pop()
       const fileName = `${userId}/${Date.now()}-original.${fileExt}`
       
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('user-images')
         .upload(fileName, file)
 
@@ -300,7 +300,7 @@ export const storage = {
   },
 
   // Delete an image from storage
-  async deleteImage(path: string): Promise<{ error: any }> {
+  async deleteImage(path: string): Promise<{ error: Error | null }> {
     try {
       const { error } = await supabase.storage
         .from('user-images')
