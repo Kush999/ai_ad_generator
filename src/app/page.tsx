@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, Award, BarChart3, Check, X } from "lucide-react";
+import { ImageComparison } from "@/components/ui/image-comparison-slider";
 
 export default function LandingPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -202,6 +203,91 @@ export default function LandingPage() {
               </CardDescription>
             </CardHeader>
           </Card>
+        </div>
+      </section>
+
+      {/* Before & After Showcase */}
+      <section className="bg-muted/30 py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              See the 
+              <span className="text-gradient"> transformation</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Drag the slider to see how our AI transforms ordinary product photos into high-converting advertisements
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            {/* E-commerce Product */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold text-center mb-6">E-commerce Product</h3>
+              <ImageComparison
+                beforeImage="/placeholder-before-1.jpg"
+                afterImage="/placeholder-after-1.jpg"
+                altBefore="Plain product photo on white background"
+                altAfter="Enhanced product photo with professional lighting and styling"
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                From basic product shot to conversion-optimized ad
+              </p>
+            </div>
+
+            {/* Lifestyle Brand */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold text-center mb-6">Lifestyle Brand</h3>
+              <ImageComparison
+                beforeImage="/placeholder-before-2.jpg"
+                afterImage="/placeholder-after-2.jpg"
+                altBefore="Casual lifestyle photo"
+                altAfter="Professional lifestyle ad with enhanced colors and composition"
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                Casual lifestyle shot transformed into compelling brand ad
+              </p>
+            </div>
+
+            {/* Luxury Product */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold text-center mb-6">Luxury Product</h3>
+              <ImageComparison
+                beforeImage="/placeholder-before-3.jpg"
+                afterImage="/placeholder-after-3.jpg"
+                altBefore="Standard luxury product photo"
+                altAfter="Premium luxury ad with sophisticated styling and lighting"
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                Standard luxury shot elevated to premium advertisement
+              </p>
+            </div>
+
+            {/* Minimalist Design */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold text-center mb-6">Minimalist Design</h3>
+              <ImageComparison
+                beforeImage="/placeholder-before-4.jpg"
+                afterImage="/placeholder-after-4.jpg"
+                altBefore="Simple minimalist product photo"
+                altAfter="Clean minimalist ad with perfect composition and subtle enhancements"
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                Clean minimal design optimized for maximum impact
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-lg text-muted-foreground mb-6">
+              Every image is automatically optimized for maximum conversion potential
+            </p>
+            <Button 
+              onClick={handleGetStarted}
+              className="text-lg px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+            >
+              Try It Yourself <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </section>
 
