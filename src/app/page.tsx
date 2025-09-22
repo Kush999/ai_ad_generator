@@ -10,6 +10,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { Sparkles, TrendingUp, Target, Zap, Star, ArrowRight, Upload, Palette, Download, Users, Award, BarChart3, Check, X } from "lucide-react";
 import { ImageComparison } from "@/components/ui/image-comparison-slider";
+import { HeroWithMockup } from "@/components/ui/hero-with-mockup";
+import { Logo } from "@/components/Logo";
+import { Hero as AnimatedHero } from "@/components/ui/animated-hero";
 
 export default function LandingPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -41,17 +44,17 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Animated Background Hero */}
+      <div className="absolute inset-0 z-0 opacity-20">
+        <AnimatedHero asBackground={true} />
+      </div>
+      
       {/* Navigation */}
-      <nav className="bg-background/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-50">
+      <nav className="bg-background/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-50 relative">
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="bg-primary/10 p-2 rounded-full">
-                <Sparkles className="h-6 w-6 text-primary" />
-              </div>
-              <span className="text-2xl font-bold text-foreground">AdCraft Studio</span>
-            </div>
+            <Logo size="md" />
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
               <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">How it Works</a>
@@ -86,58 +89,26 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 py-20 text-center">
-        <div className="max-w-5xl mx-auto">
-          <div className="inline-flex items-center space-x-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-8">
-            <Award className="h-4 w-4" />
-            <span>Trusted by marketing professionals worldwide</span>
-          </div>
-          
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[0.95]">
-            <span className="text-foreground">Create </span>
-            <span className="text-gradient">stunning ads</span>
-            <span className="text-foreground block mt-2">in seconds</span>
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-            Transform your product images into professional advertisements that convert. 
-            Our AI understands what makes ads perform and delivers results that exceed expectations.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button 
-              size="lg" 
-              onClick={handleGetStarted}
-              className="text-lg px-8 py-6 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-            >
-              {user ? "Go to Dashboard" : "Start Creating Ads"} <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="text-lg px-8 py-6 rounded-full border-2 hover:bg-accent transition-all duration-200"
-            >
-              View Success Stories
-            </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-2">3x</div>
-              <div className="text-muted-foreground">Higher Conversion Rates</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-2">60%</div>
-              <div className="text-muted-foreground">Faster Ad Creation</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-2">50K+</div>
-              <div className="text-muted-foreground">Ads Generated</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div className="relative z-10">
+        <HeroWithMockup
+        title="Create stunning ads in seconds"
+        description="Transform your product images into professional advertisements that convert. Our AI understands what makes ads perform and delivers results that exceed expectations."
+        primaryCta={{
+          text: user ? "Go to Dashboard" : "Start Creating Ads",
+          onClick: handleGetStarted,
+        }}
+        secondaryCta={{
+          text: "View Success Stories",
+          href: "#testimonials",
+        }}
+        mockupImage={{
+          alt: "AdCraft Studio Dashboard showing AI-generated ads",
+          width: 1495,
+          height: 915,
+          src: "/hero-mockup.png"
+        }}
+      />
+      </div>
 
       {/* Companies Section 
       <section className="bg-muted/30 py-16">
@@ -156,7 +127,7 @@ export default function LandingPage() {
       </section>*/}
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="container mx-auto px-6 py-20">
+      <section id="how-it-works" className="container mx-auto px-6 py-20 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             From product photo to 
@@ -207,7 +178,7 @@ export default function LandingPage() {
       </section>
 
       {/* Before & After Showcase */}
-      <section className="bg-muted/30 py-20">
+      <section className="bg-muted/30 py-20 relative z-10">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -292,7 +263,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="bg-muted/30 py-20">
+      <section id="features" className="bg-muted/30 py-20 relative z-10">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -381,7 +352,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="container mx-auto px-6 py-20">
+      <section id="pricing" className="container mx-auto px-6 py-20 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Choose your 
@@ -525,7 +496,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="container mx-auto px-6 py-20">
+      <section id="testimonials" className="container mx-auto px-6 py-20 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             AdCraft Studio is made 
@@ -565,7 +536,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-muted/30 py-20">
+      <section className="bg-muted/30 py-20 relative z-10">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -591,15 +562,10 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-background/80 backdrop-blur-sm">
+      <footer className="border-t border-border/50 bg-background/80 backdrop-blur-sm relative z-10">
         <div className="container mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="bg-primary/10 p-2 rounded-full">
-                <Sparkles className="h-6 w-6 text-primary" />
-              </div>
-              <span className="text-2xl font-bold">AdCraft Studio</span>
-            </div>
+            <Logo size="md" />
             <div className="text-center md:text-right">
               <p className="text-muted-foreground text-sm mb-2">
                 © 2025 AdCraft Studio. All rights reserved.

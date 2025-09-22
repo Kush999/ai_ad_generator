@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { database, storage } from "@/lib/database";
+import { Logo } from "@/components/Logo";
 
 export default function Dashboard() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -308,11 +309,8 @@ export default function Dashboard() {
               <span>Back to Home</span>
             </Button>*/}
             <div className="text-left">
-              <div className="flex items-center space-x-3 mb-2">
-                <div className="bg-primary/10 p-2 rounded-full">
-                  <Sparkles className="h-6 w-6 text-primary" />
-                </div>
-                <h1 className="text-3xl font-bold">AdCraft Studio</h1>
+              <div className="mb-2">
+                <Logo size="lg" />
               </div>
               <p className="text-muted-foreground text-lg">
                 Transform your products into high-converting advertisements

@@ -1,36 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  /* Professional cream background inspired by Flow */
-  --background: #FBF9F5;
-  --foreground: #1a1a1a;
+  /* New color scheme inspired by the provided image */
+  --background: #f5f2ed; /* Cream/off-white from image */
+  --foreground: #21418a; /* Dark blue from image */
   
-  /* Purple accent colors for professional branding */
-  --primary: #8B5CF6;
+  /* Primary colors using the red from image */
+  --primary: #e03a2e;
   --primary-foreground: #ffffff;
   
-  /* Muted colors for secondary elements */
-  --muted: #F5F2ED;
-  --muted-foreground: #6B7280;
+  /* Brand colors using the red */
+  --brand: #e03a2e;
+  --brand-foreground: #ffffff;
   
-  /* Card backgrounds with subtle cream tint */
-  --card: #FFFFFF;
-  --card-foreground: #1a1a1a;
+  /* Muted colors using cream and dark blue */
+  --muted: #f5f2ed;
+  --muted-foreground: #21418a;
   
-  /* Border colors */
-  --border: #E5E7EB;
-  --input: #E5E7EB;
+  /* Card backgrounds with cream tint */
+  --card: #ffffff;
+  --card-foreground: #21418a;
   
-  /* Accent colors */
-  --accent: #F3F4F6;
-  --accent-foreground: #1a1a1a;
+  /* Border colors using dark blue */
+  --border: #21418a;
+  --input: #21418a;
   
-  /* Secondary colors */
-  --secondary: #F9FAFB;
-  --secondary-foreground: #374151;
+  /* Accent colors using yellow from image */
+  --accent: #f9c62e;
+  --accent-foreground: #21418a;
   
-  /* Ring color for focus states */
-  --ring: #8B5CF6;
+  /* Secondary colors using cream */
+  --secondary: #f5f2ed;
+  --secondary-foreground: #21418a;
+  
+  /* Ring color for focus states using red */
+  --ring: #e03a2e;
 }
 
 @theme inline {
@@ -55,71 +59,79 @@
 
 /* Dark mode variables */
 [data-theme="dark"] {
-  /* Dark background with subtle purple tint */
-  --background: #0F0A1A;
-  --foreground: #F1F5F9;
+  /* Dark background using dark blue from image */
+  --background: #21418a;
+  --foreground: #f5f2ed;
   
-  /* Vibrant purple for dark mode */
-  --primary: #A855F7;
+  /* Red for dark mode primary */
+  --primary: #e03a2e;
   --primary-foreground: #ffffff;
   
-  /* Dark muted colors */
-  --muted: #1E1B2E;
-  --muted-foreground: #94A3B8;
+  /* Brand colors for dark mode */
+  --brand: #e03a2e;
+  --brand-foreground: #ffffff;
   
-  /* Dark card backgrounds */
-  --card: #1A1625;
-  --card-foreground: #F1F5F9;
+  /* Dark muted colors using darker blue */
+  --muted: #1a2f6b;
+  --muted-foreground: #f5f2ed;
   
-  /* Dark borders */
-  --border: #2D2A3D;
-  --input: #2D2A3D;
+  /* Dark card backgrounds using darker blue */
+  --card: #1a2f6b;
+  --card-foreground: #f5f2ed;
   
-  /* Dark accent colors */
-  --accent: #252138;
-  --accent-foreground: #F1F5F9;
+  /* Dark borders using yellow accent */
+  --border: #f9c62e;
+  --input: #f9c62e;
   
-  /* Dark secondary colors */
-  --secondary: #1E1B2E;
-  --secondary-foreground: #CBD5E1;
+  /* Dark accent colors using yellow */
+  --accent: #f9c62e;
+  --accent-foreground: #21418a;
   
-  /* Focus ring for dark mode */
-  --ring: #A855F7;
+  /* Dark secondary colors using darker blue */
+  --secondary: #1a2f6b;
+  --secondary-foreground: #f5f2ed;
+  
+  /* Focus ring for dark mode using red */
+  --ring: #e03a2e;
 }
 
 /* Default to light mode, respect system preference */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    /* Dark background with subtle purple tint */
-    --background: #0F0A1A;
-    --foreground: #F1F5F9;
+    /* Dark background using dark blue from image */
+    --background: #21418a;
+    --foreground: #f5f2ed;
     
-    /* Vibrant purple for dark mode */
-    --primary: #A855F7;
+    /* Red for dark mode primary */
+    --primary: #e03a2e;
     --primary-foreground: #ffffff;
     
-    /* Dark muted colors */
-    --muted: #1E1B2E;
-    --muted-foreground: #94A3B8;
+    /* Brand colors for dark mode */
+    --brand: #e03a2e;
+    --brand-foreground: #ffffff;
     
-    /* Dark card backgrounds */
-    --card: #1A1625;
-    --card-foreground: #F1F5F9;
+    /* Dark muted colors using darker blue */
+    --muted: #1a2f6b;
+    --muted-foreground: #f5f2ed;
     
-    /* Dark borders */
-    --border: #2D2A3D;
-    --input: #2D2A3D;
+    /* Dark card backgrounds using darker blue */
+    --card: #1a2f6b;
+    --card-foreground: #f5f2ed;
     
-    /* Dark accent colors */
-    --accent: #252138;
-    --accent-foreground: #F1F5F9;
+    /* Dark borders using yellow accent */
+    --border: #f9c62e;
+    --input: #f9c62e;
     
-    /* Dark secondary colors */
-    --secondary: #1E1B2E;
-    --secondary-foreground: #CBD5E1;
+    /* Dark accent colors using yellow */
+    --accent: #f9c62e;
+    --accent-foreground: #21418a;
     
-    /* Focus ring for dark mode */
-    --ring: #A855F7;
+    /* Dark secondary colors using darker blue */
+    --secondary: #1a2f6b;
+    --secondary-foreground: #f5f2ed;
+    
+    /* Focus ring for dark mode using red */
+    --ring: #e03a2e;
   }
 }
 
@@ -136,9 +148,9 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Professional text styles */
+/* Professional text styles using new color scheme */
 .text-gradient {
-  background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -166,4 +178,11 @@ html {
   hyphens: auto;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
+}
+
+/* Utility classes for hero component */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-b from-foreground via-foreground/90 to-muted-foreground;
+  }
 }
