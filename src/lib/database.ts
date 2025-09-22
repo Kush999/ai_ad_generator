@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabase, supabaseAdmin } from './supabase'
 
 export interface GeneratedAd {
   id: string
@@ -195,29 +195,71 @@ export const database = {
   // Add credits (for purchases)
   async addCredits(userId: string, creditsToAdd: number): Promise<{ data: UserProfile | null; error: any }> {
     try {
-      // Get current profile
-      const { data: profile, error: getError } = await this.getOrCreateUserProfile(userId)
-      
-      if (getError || !profile) {
-        return { data: null, error: getError || new Error('Profile not found') }
+      console.log(`Adding ${creditsToAdd} credits to user ${userId}`);
+
+      // Use service-role client if available (webhooks run without a user session)
+      const db = supabaseAdmin ?? supabase
+
+      // Fetch existing profile without RLS restrictions when using admin
+      let { data: profile, error: getError } = await db
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle()
+
+      if (getError) {
+        console.error('Error fetching profile:', getError)
+        return { data: null, error: getError }
       }
+
+      // If profile doesn't exist, create it with initial credits
+      if (!profile) {
+        console.log('Profile not found. Creating a new one for user:', userId)
+        const { data: created, error: createErr } = await db
+          .from('user_profiles')
+          .insert({
+            user_id: userId,
+            credits: 0,
+            total_credits_purchased: 0,
+          })
+          .select()
+          .single()
+
+        if (createErr) {
+          console.error('Error creating user profile:', createErr)
+          return { data: null, error: createErr }
+        }
+        profile = created
+      }
+
+      console.log('Current profile:', profile)
 
       // Add credits
       const newCredits = profile.credits + creditsToAdd
       const newTotalPurchased = profile.total_credits_purchased + creditsToAdd
-      
-      const { data, error } = await supabase
+
+      console.log(`Updating credits: ${profile.credits} + ${creditsToAdd} = ${newCredits}`)
+      console.log(`Updating total purchased: ${profile.total_credits_purchased} + ${creditsToAdd} = ${newTotalPurchased}`)
+
+      const { data, error } = await db
         .from('user_profiles')
-        .update({ 
+        .update({
           credits: newCredits,
-          total_credits_purchased: newTotalPurchased
+          total_credits_purchased: newTotalPurchased,
         })
         .eq('user_id', userId)
         .select()
         .single()
 
+      if (error) {
+        console.error('Error updating credits in database:', error)
+      } else {
+        console.log('Successfully updated credits in database:', data)
+      }
+
       return { data, error }
     } catch (error) {
+      console.error('Exception in addCredits:', error);
       return { data: null, error }
     }
   }

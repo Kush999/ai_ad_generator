@@ -55,11 +55,8 @@ export default function Dashboard() {
     if (paymentStatus === 'success') {
       console.log('Payment successful! Session ID:', sessionId);
       
-      // Refresh credits display
+      // Refresh credits display (credits are added by webhook)
       setCreditsRefreshKey(prev => prev + 1);
-      
-      // Show success message
-      alert('🎉 Payment successful! Your credits have been added to your account.');
       
       // Clean up URL parameters
       router.replace('/dashboard');
@@ -301,7 +298,7 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <div className="flex items-center space-x-6">
-            <Button
+            {/*<Button
               variant="ghost"
               size="sm"
               onClick={() => router.push('/')}
@@ -309,7 +306,7 @@ export default function Dashboard() {
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Home</span>
-            </Button>
+            </Button>*/}
             <div className="text-left">
               <div className="flex items-center space-x-3 mb-2">
                 <div className="bg-primary/10 p-2 rounded-full">

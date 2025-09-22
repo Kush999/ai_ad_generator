@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
       'Holiday / Festive': 'Design a festive ad of this product with Christmas lights, cozy holiday decor, red and green color palette, and cheerful seasonal typography.',
       'Meme-Style': 'Place this product inside a trending meme template with bold Impact font text, humorous context, and viral social media style.',
       '3D Cinematic Render': 'Generate a hyper-realistic 3D cinematic render of this product with dramatic studio lighting, glossy reflections, and ultra-detailed textures.',
-      'Magazine Editorial': 'Create a fashion-magazine style ad of this product with glossy textures, minimal high-end typography, and a sophisticated editorial layout.'
+      'Magazine Editorial': 'Create a fashion-magazine style ad of this product with glossy textures, minimal high-end typography, and a sophisticated editorial layout.',
+      'UGC': 'Create a user-generated content style ad showing a real person using this product in an authentic, everyday setting. Include natural lighting, candid photography style, and genuine product interaction that looks like it was taken by a regular user.'
     };
 
     const stylePrompt = stylePrompts[style as keyof typeof stylePrompts] || 'Create a stylish advertisement of this product';

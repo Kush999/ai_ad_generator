@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { UserMenu } from "@/components/auth/UserMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
@@ -14,12 +15,7 @@ export default function LandingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (!loading && user) {
-      router.push('/dashboard');
-    }
-  }, [user, loading, router]);
+  // No automatic redirect - allow signed-in users to view landing page
 
   if (loading) {
     return (
@@ -32,10 +28,16 @@ export default function LandingPage() {
     );
   }
 
-  // Don't render anything if user is authenticated (redirecting)
-  if (user) {
-    return null;
-  }
+  // Handle Get Started button click
+  const handleGetStarted = () => {
+    if (user) {
+      // If user is signed in, go to dashboard
+      router.push('/dashboard');
+    } else {
+      // If user is not signed in, show auth modal
+      setShowAuthModal(true);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -57,12 +59,26 @@ export default function LandingPage() {
             </div>
             <div className="flex items-center gap-3">
               <ThemeToggle />
-              <Button 
-                onClick={() => setShowAuthModal(true)}
-                className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
-              >
-                Get Started
-              </Button>
+              {user ? (
+                // Signed-in user navigation
+                <div className="flex items-center gap-3">
+                  <Button 
+                    onClick={handleGetStarted}
+                    className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                  >
+                    Go to Dashboard
+                  </Button>
+                  <UserMenu />
+                </div>
+              ) : (
+                // Anonymous user navigation
+                <Button 
+                  onClick={handleGetStarted}
+                  className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                >
+                  Get Started
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -90,10 +106,10 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button 
               size="lg" 
-              onClick={() => setShowAuthModal(true)}
+              onClick={handleGetStarted}
               className="text-lg px-8 py-6 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              Start Creating Ads <ArrowRight className="ml-2 h-5 w-5" />
+              {user ? "Go to Dashboard" : "Start Creating Ads"} <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
               size="lg" 
@@ -122,7 +138,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Companies Section */}
+      {/* Companies Section 
       <section className="bg-muted/30 py-16">
         <div className="container mx-auto px-6">
           <p className="text-center text-muted-foreground mb-12 text-lg">
@@ -136,7 +152,7 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>*/}
 
       {/* How It Works Section */}
       <section id="how-it-works" className="container mx-auto px-6 py-20">
@@ -195,7 +211,7 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Built for 
-              <span className="text-gradient">marketing teams</span>
+              <span className="text-gradient"> marketing teams</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Every feature designed to help you create ads that convert better and faster
@@ -283,7 +299,7 @@ export default function LandingPage() {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Choose your 
-            <span className="text-gradient">perfect plan</span>
+            <span className="text-gradient"> perfect plan</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Start creating stunning ads for free, then upgrade when you're ready to scale your marketing
@@ -338,11 +354,11 @@ export default function LandingPage() {
                 </div>
               </div>
               <Button 
-                onClick={() => setShowAuthModal(true)}
+                onClick={handleGetStarted}
                 className="w-full h-12 rounded-full font-semibold bg-muted hover:bg-muted/80 text-foreground border-2 border-border"
                 variant="outline"
               >
-                Start Free
+                {user ? "Go to Dashboard" : "Start Free"}
               </Button>
             </CardContent>
           </Card>
@@ -405,10 +421,10 @@ export default function LandingPage() {
                 </div>
               </div>
               <Button 
-                onClick={() => setShowAuthModal(true)}
+                onClick={handleGetStarted}
                 className="w-full h-12 rounded-full font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
               >
-                Upgrade to Pro
+                {user ? "Go to Dashboard" : "Upgrade to Pro"}
               </Button>
             </CardContent>
           </Card>
@@ -468,7 +484,7 @@ export default function LandingPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Ready to create ads that 
-              <span className="text-gradient">convert?</span>
+              <span className="text-gradient"> convert?</span>
             </h2>
             <p className="text-xl text-muted-foreground mb-10 leading-relaxed">
               Join thousands of marketing professionals who are already using AdCraft Studio 
@@ -476,13 +492,13 @@ export default function LandingPage() {
             </p>
             <Button 
               size="lg" 
-              onClick={() => setShowAuthModal(true)}
+              onClick={handleGetStarted}
               className="text-lg px-10 py-6 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              Start Creating Ads for Free <Sparkles className="ml-2 h-5 w-5" />
+              {user ? "Go to Dashboard" : "Start Creating Ads for Free"} <Sparkles className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-sm text-muted-foreground mt-4">
-              No credit card required • 50 free credits to start • $10 for 1,000 credits
+              50 free credits to start • $10 for 1,000 credits
             </p>
           </div>
         </div>
@@ -510,7 +526,10 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      {/* Auth Modal - only show for non-authenticated users */}
+      {!user && (
+        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      )}
     </div>
   );
 }

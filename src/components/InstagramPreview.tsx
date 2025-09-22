@@ -34,7 +34,8 @@ const generateCaption = (style: ImageStyle): string => {
     'holiday-festive': ["#holiday", "#festive", "#celebration", "#seasonal", "#christmas", "#cozy"],
     'meme-style': ["#meme", "#viral", "#funny", "#trending", "#humor", "#socialmedia"],
     '3d-cinematic': ["#3d", "#cinematic", "#realistic", "#render", "#professional", "#studio"],
-    'magazine-editorial': ["#editorial", "#magazine", "#fashion", "#sophisticated", "#glossy", "#highfashion"]
+    'magazine-editorial': ["#editorial", "#magazine", "#fashion", "#sophisticated", "#glossy", "#highfashion"],
+    'ugc': ["#ugc", "#usergenerated", "#authentic", "#reallife", "#candid", "#genuine", "#everyday", "#relatable"]
   };
 
   const specificTags = styleSpecificHashtags[style] || [];

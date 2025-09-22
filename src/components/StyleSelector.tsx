@@ -19,7 +19,7 @@ export const imageStyles = [
   },
   {
     id: "bold-vibrant",
-    name: "Bold & Vibrant",
+    name: "Vibrant",
     description: "Bright neon colors with geometric patterns and playful typography",
     preview: "🎨"
   },
@@ -31,13 +31,13 @@ export const imageStyles = [
   },
   {
     id: "retro-vintage",
-    name: "Retro / Vintage",
+    name: "Retro Style",
     description: "Grainy film textures with retro color grading and nostalgic fonts",
     preview: "📻"
   },
   {
     id: "playful-cartoonish",
-    name: "Playful / Cartoonish",
+    name: "Playful",
     description: "Fun cartoon-inspired with doodles and bright hand-drawn elements",
     preview: "🎭"
   },
@@ -49,13 +49,13 @@ export const imageStyles = [
   },
   {
     id: "tech-futuristic",
-    name: "Tech / Futuristic",
+    name: "Futuristic",
     description: "Glowing neon edges with holographic effects and high-tech typography",
     preview: "🚀"
   },
   {
     id: "holiday-festive",
-    name: "Holiday / Festive",
+    name: "Festive",
     description: "Christmas lights with cozy holiday decor and seasonal typography",
     preview: "🎄"
   },
@@ -67,15 +67,21 @@ export const imageStyles = [
   },
   {
     id: "3d-cinematic",
-    name: "3D Cinematic Render",
+    name: "3D Cinematic",
     description: "Hyper-realistic 3D render with dramatic studio lighting and detailed textures",
     preview: "🎬"
   },
   {
     id: "magazine-editorial",
-    name: "Magazine Editorial",
+    name: "Magazine",
     description: "Fashion-magazine style with glossy textures and sophisticated editorial layout",
     preview: "📰"
+  },
+  {
+    id: "ugc",
+    name: "UGC",
+    description: "User-generated content style showing real people using the product in authentic settings",
+    preview: "👤"
   }
 ] as const;
 
@@ -89,7 +95,7 @@ interface StyleSelectorProps {
 export function StyleSelector({ selectedStyle, onStyleSelect }: StyleSelectorProps) {
   return (
     <Card className="p-8">
-      <div className="space-y-8">
+      <div className="space-y-12">
         <Label className="text-xl font-bold">
           Choose Art Style
         </Label>
@@ -103,7 +109,7 @@ export function StyleSelector({ selectedStyle, onStyleSelect }: StyleSelectorPro
               <Button
                 variant={selectedStyle === style.id ? "default" : "outline"}
                 className={`
-                  w-full h-36 p-3 flex flex-col items-center justify-between
+                  w-full h-20 p-4 flex flex-col items-center justify-center gap-2
                   border-2 transition-all duration-200 hover:shadow-lg hover:scale-[1.02]
                   ${selectedStyle === style.id 
                     ? 'bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]' 

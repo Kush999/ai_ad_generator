@@ -4,9 +4,17 @@ import { database } from '@/lib/database';
 import { headers } from 'next/headers';
 
 export async function POST(request: NextRequest) {
+  console.log('=== STRIPE WEBHOOK RECEIVED ===');
+  console.log('Timestamp:', new Date().toISOString());
+  
   const body = await request.text();
   const headersList = await headers();
   const signature = headersList.get('stripe-signature');
+
+  console.log('Webhook received, signature present:', !!signature);
+  console.log('Webhook secret configured:', !!process.env.STRIPE_WEBHOOK_SECRET);
+  console.log('Body length:', body.length);
+  console.log('All headers:', Object.fromEntries(headersList.entries()));
 
   if (!signature) {
     console.error('Missing stripe-signature header');
@@ -46,23 +54,31 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object;
         console.log('Checkout session completed:', session.id);
+        console.log('Session metadata:', session.metadata);
+        console.log('Session payment status:', session.payment_status);
         
         if (!session.metadata) {
           console.error('No metadata found in session');
-          break;
+          return NextResponse.json(
+            { error: 'No metadata found in session' },
+            { status: 400 }
+          );
         }
 
         const { userId, credits } = session.metadata;
         
         if (!userId || !credits) {
           console.error('Missing userId or credits in metadata:', session.metadata);
-          break;
+          return NextResponse.json(
+            { error: 'Missing userId or credits in metadata' },
+            { status: 400 }
+          );
         }
 
         console.log(`Processing payment: Adding ${credits} credits to user ${userId}`);
 
         // Add credits to user account
-        const { error } = await database.addCredits(userId, parseInt(credits));
+        const { data: updatedProfile, error } = await database.addCredits(userId, parseInt(credits));
         
         if (error) {
           console.error('Error adding credits after payment:', error);
@@ -73,6 +89,7 @@ export async function POST(request: NextRequest) {
         }
 
         console.log(`✅ Successfully added ${credits} credits to user ${userId}`);
+        console.log('Updated profile:', updatedProfile);
         break;
       }
 
